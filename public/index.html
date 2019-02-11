@@ -1,4 +1,12 @@
 <head>
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Tell the browser it's a PWA -->
     <meta name="mobile-web-app-capable" content="yes">
@@ -9,20 +17,56 @@
     <link rel="apple-touch-icon" sizes="512x512" href="Emojione1_1F3B1.svg.png">
 </head>
 
-<body>
-    <p>Hello & welcome to the magic 8 ball!</p>
+<body style="align-content: center">
+    <p>hey Hello & welcome to the magic 8 ball!</p>
     <form id="myForm">
         <input placeholder="enter your question" />
         <p id="answer">If you had typed a question the answer would have been here.</p>
-        <button type="submit">Ask the magic 8 ball.</button>
+        
+        <button class="btn waves-effect waves-light" type="submit" name="action">Ask the magic 8 ball!
+            <i class="material-icons right">send</i></button>
     </form>
     <script>
-        document.getElementById("myForm").addEventListener("submit", event => {
+
+        function takeTurn(event) {
             let aAnswers = ["outlook is good", "It's not in the cards", "definitely not", "don't count on it", "certainly", "my sources say yes", "It wasn't me", "The answer is yes!"];
             let nAnswer = Math.floor(Math.random() * aAnswers.length);
             document.getElementById("answer").innerHTML = aAnswers[nAnswer];
             event.preventDefault();
-        });
+        }
+        document.getElementById("myForm").addEventListener("submit", takeTurn);
+
+        if (typeof window.DeviceMotionEvent != 'undefined') {
+            // Shake sensitivity (a lower number is more)
+            var sensitivity = 20;
+
+
+            // Position variables
+            var x1 = 0, y1 = 0, z1 = 0, x2 = 0, y2 = 0, z2 = 0;
+
+            // Listen to motion events and update the position
+            window.addEventListener('devicemotion', function (e) {
+                x1 = e.accelerationIncludingGravity.x;
+                y1 = e.accelerationIncludingGravity.y;
+                z1 = e.accelerationIncludingGravity.z;
+            }, false);
+
+            // Periodically check the position and fire
+            // if the change is greater than the sensitivity
+            setInterval(function (e) {
+                var change = Math.abs(x1 - x2 + y1 - y2 + z1 - z2);
+
+                if (change > sensitivity) {
+                    //alert('Shake!');
+                    takeTurn(e);
+                }
+
+                // Update new position
+                x2 = x1;
+                y2 = y1;
+                z2 = z1;
+            }, 150);
+        }
 
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function () {
